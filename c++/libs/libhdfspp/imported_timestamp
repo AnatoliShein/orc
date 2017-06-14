@@ -1,0 +1,10 @@
+Wed Jun 14 15:27:46 EDT 2017
+HDFS-11971
+commit b132092169fad48cee8aaaeeb0256304662f514f
+Author: Anatoli Shein <anatoli.shein@hpe.com>
+Date:   Wed Jun 14 15:26:22 2017 -0400
+
+    Fixed gendirs
+diffs: --------------
+       --------------
+Wed Jun 14 15:27:46 EDT 2017

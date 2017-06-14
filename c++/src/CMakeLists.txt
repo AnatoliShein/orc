@@ -123,6 +123,7 @@ include_directories (
   ${ZLIB_INCLUDE_DIRS}
   ${SNAPPY_INCLUDE_DIRS}
   ${LZ4_INCLUDE_DIRS}
+  ${LIBHDFSPP_INCLUDE_DIRS}
   )
 
 add_custom_command(OUTPUT orc_proto.pb.h orc_proto.pb.cc
@@ -148,6 +149,7 @@ add_library (orc STATIC
   LzoDecompressor.cc
   MemoryPool.cc
   OrcFile.cc
+  OrcHdfsFile.cc
   Reader.cc
   RLEv1.cc
   RLEv2.cc
@@ -166,6 +168,7 @@ target_link_libraries (orc
   ${ZLIB_LIBRARIES}
   ${SNAPPY_LIBRARIES}
   ${LZ4_LIBRARIES}
+  ${LIBHDFSPP_LIBRARIES}
   )
 
-add_dependencies(orc protoc)
+add_dependencies(orc protoc-bin)

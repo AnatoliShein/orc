@@ -29,7 +29,11 @@ void printStatistics(const char *filename, bool withIndex) {
 
   orc::ReaderOptions opts;
   std::unique_ptr<orc::Reader> reader;
-  reader = orc::createReader(orc::readLocalFile(std::string(filename)), opts);
+  if(strncmp (filename, "hdfs://", 7) == 0){
+    reader = orc::createReader(orc::readHdfsFile(std::string(filename)), opts);
+  } else {
+    reader = orc::createReader(orc::readLocalFile(std::string(filename)), opts);
+  }
 
   // print out all selected columns statistics.
   std::unique_ptr<orc::Statistics> colStats = reader->getStatistics();

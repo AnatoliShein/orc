@@ -108,6 +108,12 @@ namespace orc {
   ORC_UNIQUE_PTR<InputStream> readLocalFile(const std::string& path);
 
   /**
+   * Create a stream to an HDFS file.
+   * @param path the uri of the file in HDFS
+   */
+  ORC_UNIQUE_PTR<InputStream> readHdfsFile(const std::string& path);
+
+  /**
    * Create a reader to the for the ORC file.
    * @param stream the stream to read
    * @param options the options for reading the file

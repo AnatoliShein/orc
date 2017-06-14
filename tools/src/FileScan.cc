@@ -28,8 +28,12 @@
 
 void scanFile(std::ostream & out, const char* filename, uint64_t batchSize) {
   orc::ReaderOptions readerOpts;
-  std::unique_ptr<orc::Reader> reader =
-    orc::createReader(orc::readLocalFile(filename), readerOpts);
+  std::unique_ptr<orc::Reader> reader;
+  if(strncmp (filename, "hdfs://", 7) == 0){
+    reader = orc::createReader(orc::readHdfsFile(std::string(filename)), readerOpts);
+  } else {
+    reader = orc::createReader(orc::readLocalFile(std::string(filename)), readerOpts);
+  }
   std::unique_ptr<orc::RowReader> rowReader = reader->createRowReader();
   std::unique_ptr<orc::ColumnVectorBatch> batch =
     rowReader->createRowBatch(batchSize);

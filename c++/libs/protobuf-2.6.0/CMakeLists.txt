@@ -68,7 +68,50 @@ add_library(protobuf STATIC
 
 install(TARGETS protobuf DESTINATION lib)
 
-add_executable(protoc
+add_library(protoc STATIC
+    src/google/protobuf/compiler/main.cc
+    src/google/protobuf/compiler/java/java_doc_comment.cc
+    src/google/protobuf/compiler/code_generator.cc
+    src/google/protobuf/compiler/command_line_interface.cc
+    src/google/protobuf/compiler/subprocess.cc
+    src/google/protobuf/compiler/zip_writer.cc
+    src/google/protobuf/compiler/plugin.cc
+    src/google/protobuf/compiler/plugin.pb.cc
+    src/google/protobuf/compiler/cpp/cpp_enum.cc
+    src/google/protobuf/compiler/cpp/cpp_enum_field.cc
+    src/google/protobuf/compiler/cpp/cpp_extension.cc
+    src/google/protobuf/compiler/cpp/cpp_field.cc
+    src/google/protobuf/compiler/cpp/cpp_file.cc
+    src/google/protobuf/compiler/cpp/cpp_generator.cc
+    src/google/protobuf/compiler/cpp/cpp_helpers.cc
+    src/google/protobuf/compiler/cpp/cpp_message.cc
+    src/google/protobuf/compiler/cpp/cpp_message_field.cc
+    src/google/protobuf/compiler/cpp/cpp_primitive_field.cc
+    src/google/protobuf/compiler/cpp/cpp_service.cc
+    src/google/protobuf/compiler/cpp/cpp_string_field.cc
+    src/google/protobuf/compiler/java/java_context.cc
+    src/google/protobuf/compiler/java/java_enum.cc
+    src/google/protobuf/compiler/java/java_enum_field.cc
+    src/google/protobuf/compiler/java/java_extension.cc
+    src/google/protobuf/compiler/java/java_field.cc
+    src/google/protobuf/compiler/java/java_file.cc
+    src/google/protobuf/compiler/java/java_generator.cc
+    src/google/protobuf/compiler/java/java_generator_factory.cc
+    src/google/protobuf/compiler/java/java_helpers.cc
+    src/google/protobuf/compiler/java/java_lazy_message_field.cc
+    src/google/protobuf/compiler/java/java_message.cc
+    src/google/protobuf/compiler/java/java_message_field.cc
+    src/google/protobuf/compiler/java/java_name_resolver.cc
+    src/google/protobuf/compiler/java/java_primitive_field.cc
+    src/google/protobuf/compiler/java/java_service.cc
+    src/google/protobuf/compiler/java/java_shared_code_generator.cc
+    src/google/protobuf/compiler/java/java_string_field.cc
+    src/google/protobuf/compiler/python/python_generator.cc
+  )
+
+install(TARGETS protoc DESTINATION lib)
+
+add_executable(protoc-bin
     src/google/protobuf/compiler/main.cc
     src/google/protobuf/compiler/java/java_doc_comment.cc
     src/google/protobuf/compiler/code_generator.cc
@@ -109,6 +152,9 @@ add_executable(protoc
     src/google/protobuf/compiler/python/python_generator.cc
   )
    
-  target_link_libraries(protoc
+  SET_TARGET_PROPERTIES(protoc-bin
+  PROPERTIES OUTPUT_NAME protoc)
+  
+  target_link_libraries(protoc-bin
     protobuf
   )

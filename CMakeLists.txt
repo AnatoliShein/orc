@@ -52,11 +52,30 @@ if(NOT APPLE AND NOT MSVC)
   list (APPEND GMOCK_LIBRARIES pthread)
 endif(NOT APPLE AND NOT MSVC)
 
+set (LIBHDFSPP_INCLUDE_DIRS
+     "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/lib"
+     "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/include"
+     "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/third_party/tr2"
+     )
+set (LIBHDFSPP_LIBRARIES hdfspp_static)
+
+set (LZ4_VERSION "r131")
+set (LZ4_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/c++/libs/lz4-${LZ4_VERSION}/lib")
+set (LZ4_LIBRARIES lz4)
+
 set (PROTOBUF_VERSION "2.6.0")
 set (PROTOBUF_INCLUDE_DIRS
-     "${CMAKE_SOURCE_DIR}/c++/libs/protobuf-${PROTOBUF_VERSION}/src")
+     "${CMAKE_SOURCE_DIR}/c++/libs/protobuf-${PROTOBUF_VERSION}"
+     "${CMAKE_SOURCE_DIR}/c++/libs/protobuf-${PROTOBUF_VERSION}/src"
+     )
+set (PROTOBUF_INCLUDE_DIR ${PROTOBUF_INCLUDE_DIRS})
 set (PROTOBUF_LIBRARIES protobuf)
+set (PROTOBUF_LIBRARY ${PROTOBUF_LIBRARIES})
+set (PROTOBUF_LIBRARY_DEBUG ${PROTOBUF_LIBRARIES})
+set (PROTOBUF_PROTOC_LIBRARY protoc)
+set (PROTOBUF_PROTOC_LIBRARY_DEBUG ${PROTOBUF_PROTOC_LIBRARY})
 set (PROTOBUF_EXECUTABLE "${CMAKE_BINARY_DIR}/c++/libs/protobuf-${PROTOBUF_VERSION}/protoc")
+set (PROTOBUF_PROTOC_EXECUTABLE ${PROTOBUF_EXECUTABLE})
 
 #
 # Compiler specific flags
