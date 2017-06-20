@@ -168,17 +168,3 @@ namespace orc {
     return std::unique_ptr<InputStream>(new HdfsFileInputStream(path));
   }
 }
-
-#ifndef HAS_STOLL
-
-  #include <sstream>
-
-  int64_t std::stoll(std::string str) {
-    int64_t val = 0;
-    stringstream ss ;
-    ss << str ;
-    ss >> val ;
-    return val;
-  }
-
-#endif
