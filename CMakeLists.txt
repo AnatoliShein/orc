@@ -58,6 +58,9 @@ set (LIBHDFSPP_INCLUDE_DIRS
      "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/third_party/tr2"
      )
 set (LIBHDFSPP_LIBRARIES hdfspp_static)
+if(NOT DEFINED HDFSPP_LIBRARY_ONLY)
+     set (HDFSPP_LIBRARY_ONLY TRUE)
+endif(NOT APPLE AND NOT MSVC)
 
 set (LZ4_VERSION "r131")
 set (LZ4_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/c++/libs/lz4-${LZ4_VERSION}/lib")

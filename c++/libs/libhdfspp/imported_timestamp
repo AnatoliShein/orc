@@ -1,10 +1,10 @@
-Wed Jun 14 15:27:46 EDT 2017
-HDFS-11971
-commit b132092169fad48cee8aaaeeb0256304662f514f
-Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Wed Jun 14 15:26:22 2017 -0400
+Tue Jun 20 15:55:40 EDT 2017
+HDFS-8707
+commit 0d2d073e2b6837ef89791b90f7f815a3f9132bd1
+Author: James Clampffer <james.clampffer@hp.com>
+Date:   Tue Jun 20 15:17:58 2017 -0400
 
-    Fixed gendirs
+    HDFS-11971: libhdfs++: [Fix] a few portability issues.  Contributed by Anatoli Schein
 diffs: --------------
        --------------
-Wed Jun 14 15:27:46 EDT 2017
+Tue Jun 20 15:55:41 EDT 2017
