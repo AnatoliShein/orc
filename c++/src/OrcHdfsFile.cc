@@ -34,15 +34,13 @@
 #include "common/hdfs_configuration.h"
 #include "common/configuration_loader.h"
 
-#define BUF_SIZE 1048576 //1 MB
-
 namespace orc {
 
   class HdfsFileInputStream : public InputStream {
   private:
     std::string filename;
     std::unique_ptr<hdfs::FileHandle> file;
-    std::shared_ptr<hdfs::FileSystem> file_system;
+    std::unique_ptr<hdfs::FileSystem> file_system;
     uint64_t totalLength;
 
   public:
@@ -66,9 +64,9 @@ namespace orc {
         options = config->GetOptions();
       }
       hdfs::IoService * io_service = hdfs::IoService::New();
-      //Wrapping fs into a shared pointer to guarantee deletion
-      std::shared_ptr<hdfs::FileSystem> fs(hdfs::FileSystem::New(io_service, "", options));
-      if (!fs) {
+      //Wrapping file_system into a unique pointer to guarantee deletion
+      file_system = std::unique_ptr<hdfs::FileSystem>(hdfs::FileSystem::New(io_service, "", options));
+      if (!file_system) {
         throw ParseError("Can't create FileSystem object. ");
       }
       hdfs::Status status;
@@ -76,12 +74,12 @@ namespace orc {
       if(!uri.value().get_host().empty()){
         //If port is supplied we use it, otherwise we use the empty string so that it will be looked up in configs.
         std::string port = (uri.value().get_port()) ? std::to_string(uri.value().get_port().value()) : "";
-        status = fs->Connect(uri.value().get_host(), port);
+        status = file_system->Connect(uri.value().get_host(), port);
         if (!status.ok()) {
           throw ParseError("Can't connect to " + uri.value().get_host() + ":" + port + ". " + status.ToString());
         }
       } else {
-        status = fs->ConnectToDefaultFs();
+        status = file_system->ConnectToDefaultFs();
         if (!status.ok()) {
           if(!options.defaultFS.get_host().empty()){
             throw ParseError("Error connecting to " + options.defaultFS.str() + ". " + status.ToString());
@@ -91,23 +89,20 @@ namespace orc {
         }
       }
 
-      if (!fs) {
+      if (!file_system) {
         throw ParseError("Can't connect the file system. ");
       }
 
       hdfs::FileHandle *file_raw = nullptr;
-      status = fs->Open(uri->get_path(), &file_raw);
+      status = file_system->Open(uri->get_path(), &file_raw);
       if (!status.ok()) {
         throw ParseError("Can't open " + uri->get_path() + ". " + status.ToString());
       }
       //wrapping file_raw into a unique pointer to guarantee deletion
-      std::unique_ptr<hdfs::FileHandle> file_handle(file_raw);
-      file = std::move(file_handle);
-      //transferring the ownership of FileSystem to HdfsFileInputStream to avoid premature deallocation
-      file_system = fs;
+      file.reset(file_raw);
 
       hdfs::StatInfo stat_info;
-      status = fs->GetFileInfo(uri->get_path(), stat_info);
+      status = file_system->GetFileInfo(uri->get_path(), stat_info);
       if (!status.ok()) {
         throw ParseError("Can't stat " + uri->get_path() + ". " + status.ToString());
       }
@@ -121,14 +116,13 @@ namespace orc {
     }
 
     uint64_t getNaturalReadSize() const override {
-      return BUF_SIZE;
+      return 1048576; //1 MB
     }
 
     void read(void* buf,
               uint64_t length,
               uint64_t offset) override {
 
-      ssize_t total_bytes_read = 0;
       size_t last_bytes_read = 0;
 
       if (!buf) {
@@ -136,24 +130,10 @@ namespace orc {
       }
 
       hdfs::Status status;
-      char input_buffer[BUF_SIZE];
-      do{
-        //Reading file chunks
-        status = file->PositionRead(input_buffer, sizeof(input_buffer), offset, &last_bytes_read);
-        if(status.ok()) {
-          //Writing file chunks to buf
-          if(total_bytes_read + last_bytes_read >= length){
-            memcpy((char*) buf + total_bytes_read, input_buffer, length - total_bytes_read);
-            break;
-          } else {
-            memcpy((char*) buf + total_bytes_read, input_buffer, last_bytes_read);
-            total_bytes_read += last_bytes_read;
-            offset += last_bytes_read;
-          }
-        } else {
-          throw ParseError("Error reading the file: " + status.ToString());
-        }
-      } while (true);
+      status = file->PositionRead(buf, static_cast<size_t>(length), static_cast<off_t>(offset), &last_bytes_read);
+      if(!status.ok()) {
+        throw ParseError("Error reading the file: " + status.ToString());
+      }
     }
 
     const std::string& getName() const override {
