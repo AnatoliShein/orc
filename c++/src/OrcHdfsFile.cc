@@ -123,17 +123,21 @@ namespace orc {
               uint64_t length,
               uint64_t offset) override {
 
-      size_t last_bytes_read = 0;
-
       if (!buf) {
         throw ParseError("Buffer is null");
       }
 
       hdfs::Status status;
-      status = file->PositionRead(buf, static_cast<size_t>(length), static_cast<off_t>(offset), &last_bytes_read);
-      if(!status.ok()) {
-        throw ParseError("Error reading the file: " + status.ToString());
-      }
+      size_t total_bytes_read = 0;
+      size_t last_bytes_read = 0;
+      
+      do {
+        status = file->PositionRead(buf, static_cast<size_t>(length) - total_bytes_read, static_cast<off_t>(offset + total_bytes_read), &last_bytes_read);
+        if(!status.ok()) {
+          throw ParseError("Error reading the file: " + status.ToString());
+        }
+        total_bytes_read += last_bytes_read;
+      } while (total_bytes_read < length);
     }
 
     const std::string& getName() const override {
