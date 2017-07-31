@@ -18,7 +18,7 @@
 #ifndef LIBHDFSPP_OPTIONS_H_
 #define LIBHDFSPP_OPTIONS_H_
 
-#include "common/uri.h"
+#include "hdfspp/uri.h"
 
 #include <string>
 #include <vector>
@@ -28,9 +28,9 @@ namespace hdfs {
 
 
 struct NamenodeInfo {
-  NamenodeInfo(const std::string &nameservice, const std::string &nodename, const URI &uri) :
-                nameservice(nameservice), name(nodename), uri(uri) {}
-  NamenodeInfo(){};
+  NamenodeInfo(const std::string &nameservice_, const std::string &nodename_, const URI &uri_) :
+                nameservice(nameservice_), name(nodename_), uri(uri_) {}
+  NamenodeInfo(){}
   //nameservice this belongs to
   std::string nameservice;
   //node name

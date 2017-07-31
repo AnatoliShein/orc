@@ -30,7 +30,6 @@
 #include <unistd.h>
 
 #include "hdfspp/hdfspp.h"
-#include "common/uri.h"
 #include "common/hdfs_configuration.h"
 #include "common/configuration_loader.h"
 
@@ -48,8 +47,10 @@ namespace orc {
       filename = _filename ;
 
       //Building a URI object from the given uri_path
-      hdfs::optional<hdfs::URI> uri = hdfs::URI::parse_from_string(filename);
-      if (!uri) {
+      hdfs::URI uri;
+      try {
+        uri = hdfs::URI::parse_from_string(filename);
+      } catch (const hdfs::uri_parse_error& e) {
         throw ParseError("Malformed URI: " + filename);
       }
 
@@ -73,13 +74,13 @@ namespace orc {
       }
       hdfs::Status status;
       //Checking if the user supplied the host
-      if(!uri.value().get_host().empty()){
+      if(!uri.get_host().empty()){
         //Using port if supplied, otherwise using "" to look up port in configs
-        std::string port = (uri.value().get_port()) ?
-            std::to_string(uri.value().get_port().value()) : "";
-        status = file_system->Connect(uri.value().get_host(), port);
+        std::string port = uri.has_port() ?
+            std::to_string(uri.get_port()) : "";
+        status = file_system->Connect(uri.get_host(), port);
         if (!status.ok()) {
-          throw ParseError("Can't connect to " + uri.value().get_host()
+          throw ParseError("Can't connect to " + uri.get_host()
               + ":" + port + ". " + status.ToString());
         }
       } else {
@@ -101,19 +102,19 @@ namespace orc {
       }
 
       hdfs::FileHandle *file_raw = nullptr;
-      status = file_system->Open(uri->get_path(), &file_raw);
+      status = file_system->Open(uri.get_path(), &file_raw);
       if (!status.ok()) {
         throw ParseError("Can't open "
-            + uri->get_path() + ". " + status.ToString());
+            + uri.get_path() + ". " + status.ToString());
       }
       //Wrapping file_raw into a unique pointer to guarantee deletion
       file.reset(file_raw);
 
       hdfs::StatInfo stat_info;
-      status = file_system->GetFileInfo(uri->get_path(), stat_info);
+      status = file_system->GetFileInfo(uri.get_path(), stat_info);
       if (!status.ok()) {
         throw ParseError("Can't stat "
-            + uri->get_path() + ". " + status.ToString());
+            + uri.get_path() + ". " + status.ToString());
       }
       totalLength = stat_info.length;
     }
@@ -139,7 +140,7 @@ namespace orc {
       hdfs::Status status;
       size_t total_bytes_read = 0;
       size_t last_bytes_read = 0;
-      
+
       do {
         status = file->PositionRead(buf,
             static_cast<size_t>(length) - total_bytes_read,

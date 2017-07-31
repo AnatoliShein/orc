@@ -1,10 +1,10 @@
-Tue Jun 20 15:55:40 EDT 2017
+Mon Jul 31 09:59:59 EDT 2017
 HDFS-8707
-commit 0d2d073e2b6837ef89791b90f7f815a3f9132bd1
+commit 3117e2a87412924787acce99f6c5b9fd129bd014
 Author: James Clampffer <james.clampffer@hp.com>
-Date:   Tue Jun 20 15:17:58 2017 -0400
+Date:   Tue Jul 25 12:25:45 2017 -0400
 
-    HDFS-11971: libhdfs++: [Fix] a few portability issues.  Contributed by Anatoli Schein
+    HDFS-12026: libhdfs++: Fix compilation errors and warnings when compiling with Clang.  Contributed by Anatoli Shein.
 diffs: --------------
        --------------
-Tue Jun 20 15:55:41 EDT 2017
+Mon Jul 31 09:59:59 EDT 2017

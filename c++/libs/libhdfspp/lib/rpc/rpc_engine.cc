@@ -20,7 +20,7 @@
 #include "common/util.h"
 #include "common/logging.h"
 #include "common/namenode_info.h"
-#include "optional.hpp"
+#include "common/optional_wrapper.h"
 
 #include <algorithm>
 
@@ -176,10 +176,12 @@ std::shared_ptr<RpcConnection> RpcEngine::NewConnection()
 
 std::shared_ptr<RpcConnection> RpcEngine::InitializeConnection()
 {
-  std::shared_ptr<RpcConnection> result = NewConnection();
-  result->SetEventHandlers(event_handlers_);
-  result->SetClusterName(cluster_name_);
-  return result;
+  std::shared_ptr<RpcConnection> newConn = NewConnection();
+  newConn->SetEventHandlers(event_handlers_);
+  newConn->SetClusterName(cluster_name_);
+  newConn->SetAuthInfo(auth_info_);
+
+  return newConn;
 }
 
 void RpcEngine::AsyncRpcCommsError(
@@ -218,7 +220,9 @@ void RpcEngine::RpcCommsError(
 
     RetryAction retry = RetryAction::fail(""); // Default to fail
 
-    if (status.notWorthRetry()) {
+    if(connect_canceled_) {
+      retry = RetryAction::fail("Operation canceled");
+    } else if (status.notWorthRetry()) {
       retry = RetryAction::fail(status.ToString().c_str());
     } else if (retry_policy()) {
       retry = retry_policy()->ShouldRetry(status, req->IncrementRetryCount(), req->get_failover_count(), true);
