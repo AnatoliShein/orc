@@ -63,25 +63,31 @@ if (NOT THREAD_LOCAL_SUPPORTED)
 endif (NOT THREAD_LOCAL_SUPPORTED)
 
 # Check if PROTOC library was compiled with the compatible compiler by trying
-# to compile some dummy code
-unset (PROTOC_IS_COMPATIBLE CACHE)
-set (CMAKE_REQUIRED_LIBRARIES ${PROTOBUF_LIBRARY} ${PROTOBUF_PROTOC_LIBRARY})
-check_cxx_source_compiles(
-    "#include <google/protobuf/io/printer.h>
-    #include <string>
-    int main(void) {
-      ::google::protobuf::io::ZeroCopyOutputStream *out = NULL;
-      ::google::protobuf::io::Printer printer(out, '$');
-      printer.PrintRaw(std::string(\"test\"));
-      return 0;
-    }"
-    PROTOC_IS_COMPATIBLE)
-if (NOT PROTOC_IS_COMPATIBLE)
-  message(FATAL_ERROR
-  "FATAL ERROR: the Protocol Buffers Library and the Libhdfs++ Library must both be compiled \
-  with the same (or compatible) compiler. Normally only the same major versions of the same \
-  compiler are compatible with each other.")
-endif (NOT PROTOC_IS_COMPATIBLE)
+# to compile some dummy code (only if the library already exists and is not
+# being built from source)
+unset (PROTOBUF_EXISTS CACHE)
+CHECK_LIBRARY_EXISTS(${PROTOBUF_LIBRARY} _ZN6google8protobuf8compiler6ParserC1Ev "" PROTOBUF_EXISTS)
+if(PROTOBUF_EXISTS)
+  unset (PROTOC_IS_COMPATIBLE CACHE)
+  set (CMAKE_REQUIRED_INCLUDES ${PROTOBUF_INCLUDE_DIRS})
+  set (CMAKE_REQUIRED_LIBRARIES ${PROTOBUF_LIBRARY} ${PROTOBUF_PROTOC_LIBRARY})
+  check_cxx_source_compiles(
+      "#include <google/protobuf/io/printer.h>
+      #include <string>
+      int main(void) {
+        ::google::protobuf::io::ZeroCopyOutputStream *out = NULL;
+        ::google::protobuf::io::Printer printer(out, '$');
+        printer.PrintRaw(std::string(\"test\"));
+        return 0;
+      }"
+      PROTOC_IS_COMPATIBLE)
+  if (NOT PROTOC_IS_COMPATIBLE)
+    message(FATAL_ERROR
+    "FATAL ERROR: the Protocol Buffers Library and the Libhdfs++ Library must both be compiled \
+    with the same (or compatible) compiler. Normally only the same major versions of the same \
+    compiler are compatible with each other.")
+  endif (NOT PROTOC_IS_COMPATIBLE)
+endif (PROTOBUF_EXISTS)
 
 find_program(MEMORYCHECK_COMMAND valgrind HINTS ${VALGRIND_DIR} )
 set(MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --error-exitcode=1")

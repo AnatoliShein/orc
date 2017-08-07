@@ -1,10 +1,10 @@
-Mon Jul 31 09:59:59 EDT 2017
-HDFS-8707
-commit 3117e2a87412924787acce99f6c5b9fd129bd014
-Author: James Clampffer <james.clampffer@hp.com>
-Date:   Tue Jul 25 12:25:45 2017 -0400
+Mon Aug  7 11:36:03 EDT 2017
+HDFS-12237
+commit 550b594f1abbc2499a73294675fd0f20258469f2
+Author: Anatoli Shein <anatoli.shein@hpe.com>
+Date:   Mon Aug 7 11:15:32 2017 -0400
 
-    HDFS-12026: libhdfs++: Fix compilation errors and warnings when compiling with Clang.  Contributed by Anatoli Shein.
+    added check if protobuf library exists
 diffs: --------------
        --------------
-Mon Jul 31 09:59:59 EDT 2017
+Mon Aug  7 11:36:04 EDT 2017
