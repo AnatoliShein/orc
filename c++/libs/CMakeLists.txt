@@ -18,6 +18,4 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 endif ()
 
-add_subdirectory(gmock-${GMOCK_VERSION})
-add_subdirectory(protobuf-${PROTOBUF_VERSION})
 add_subdirectory(libhdfspp)
