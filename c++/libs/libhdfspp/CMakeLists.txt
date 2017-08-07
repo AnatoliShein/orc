@@ -215,6 +215,7 @@ set(PROTO_HADOOP_TEST_DIR  ${HADOOP_IMPORT_DIR}/proto/hadoop_test)
 include_directories(
   include
   lib
+  third_party/gmock-1.7.0
   ${HADOOP_IMPORT_DIR}/include
 )
 
@@ -222,7 +223,6 @@ include_directories( SYSTEM
   ${PROJECT_BINARY_DIR}/lib/proto
   third_party/asio-1.10.2/include
   third_party/rapidxml-1.13
-  third_party/gmock-1.7.0
   third_party/tr2
   third_party/protobuf
   third_party/uriparser2

@@ -148,6 +148,7 @@ set (PROTOBUF_PREFIX "${THIRDPARTY_DIR}/protobuf_ep-install")
 set (PROTOBUF_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/protobuf_ep-prefix/src/protobuf_ep")
 set (PROTOBUF_INCLUDE_DIRS "${PROTOBUF_PREFIX}/include")
 set (PROTOBUF_STATIC_LIB "${PROTOBUF_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}protobuf${CMAKE_STATIC_LIBRARY_SUFFIX}")
+set (PROTOC_STATIC_LIB "${PROTOBUF_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}protoc${CMAKE_STATIC_LIBRARY_SUFFIX}")
 set (PROTOBUF_EXECUTABLE "${PROTOBUF_PREFIX}/bin/protoc")
 set (PROTOBUF_SRC_URL "https://github.com/google/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-${PROTOBUF_VERSION}.tar.gz")
 
@@ -168,6 +169,15 @@ add_library (protobuf STATIC IMPORTED)
 set_target_properties (protobuf PROPERTIES IMPORTED_LOCATION ${PROTOBUF_STATIC_LIB})
 add_dependencies (protobuf protobuf_ep)
 set (PROTOBUF_LIBRARIES protobuf)
+
+add_library (protoc STATIC IMPORTED)
+set_target_properties (protoc PROPERTIES IMPORTED_LOCATION ${PROTOC_STATIC_LIB})
+add_dependencies (protoc protobuf_ep)
+set (PROTOBUF_PROTOC_LIBRARY protoc)
+
+set (PROTOBUF_LIBRARY ${PROTOBUF_LIBRARIES})
+set (PROTOBUF_PROTOC_EXECUTABLE ${PROTOBUF_EXECUTABLE})
+
 install(DIRECTORY ${PROTOBUF_PREFIX}/lib DESTINATION .
                                          PATTERN "pkgconfig" EXCLUDE
                                          PATTERN "*.so*" EXCLUDE
