@@ -52,7 +52,6 @@ target_link_libraries (orc-test
   ${PROTOBUF_LIBRARIES}
   ${SNAPPY_LIBRARIES}
   ${ZLIB_LIBRARIES}
-  ${LIBHDFSPP_LIBRARIES}
 )
 
 add_executable (create-test-files

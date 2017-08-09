@@ -1,10 +1,10 @@
-Mon Aug  7 11:36:03 EDT 2017
+Tue Aug  8 16:55:48 EDT 2017
 HDFS-12237
-commit 550b594f1abbc2499a73294675fd0f20258469f2
+commit 6d2d87948b2ec1538c2d2275bfafcf537e2f0912
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Mon Aug 7 11:15:32 2017 -0400
+Date:   Tue Aug 8 08:59:20 2017 -0400
 
-    added check if protobuf library exists
+    removed check for library and changed error to warning
 diffs: --------------
        --------------
-Mon Aug  7 11:36:04 EDT 2017
+Tue Aug  8 16:55:48 EDT 2017

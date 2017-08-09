@@ -16,6 +16,5 @@ include_directories (
   )
 
 add_subdirectory(include)
-add_subdirectory(libs)
 add_subdirectory(src)
 add_subdirectory(test)

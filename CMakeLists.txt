@@ -44,16 +44,6 @@ SET(CPACK_GENERATOR "TGZ")
 INCLUDE(CPack)
 INCLUDE(ExternalProject)
 
-set (LIBHDFSPP_INCLUDE_DIRS
-     "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/lib"
-     "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/include"
-     "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/third_party/tr2"
-     )
-set (LIBHDFSPP_LIBRARIES hdfspp_static)
-if(NOT DEFINED HDFSPP_LIBRARY_ONLY)
-     set (HDFSPP_LIBRARY_ONLY TRUE)
-endif(NOT DEFINED HDFSPP_LIBRARY_ONLY)
-
 #
 # Compiler specific flags
 #

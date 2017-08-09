@@ -173,12 +173,54 @@ set (PROTOBUF_LIBRARIES protobuf)
 add_library (protoc STATIC IMPORTED)
 set_target_properties (protoc PROPERTIES IMPORTED_LOCATION ${PROTOC_STATIC_LIB})
 add_dependencies (protoc protobuf_ep)
-set (PROTOBUF_PROTOC_LIBRARY protoc)
-
-set (PROTOBUF_LIBRARY ${PROTOBUF_LIBRARIES})
-set (PROTOBUF_PROTOC_EXECUTABLE ${PROTOBUF_EXECUTABLE})
 
 install(DIRECTORY ${PROTOBUF_PREFIX}/lib DESTINATION .
                                          PATTERN "pkgconfig" EXCLUDE
                                          PATTERN "*.so*" EXCLUDE
                                          PATTERN "*.dylib" EXCLUDE)
+
+# ----------------------------------------------------------------------
+# LIBHDFSPP
+
+find_package(CyrusSASL)
+find_package(OpenSSL)
+find_package(Threads)
+
+set (LIBHDFSPP_PREFIX "${THIRDPARTY_DIR}/libhdfspp_ep-install")
+set (LIBHDFSPP_INCLUDE_DIRS
+     "${LIBHDFSPP_PREFIX}/lib"
+     "${LIBHDFSPP_PREFIX}/include"
+     "${LIBHDFSPP_PREFIX}/third_party/tr2"
+     "${CMAKE_BINARY_DIR}/libhdfspp_ep-prefix/src/libhdfspp_ep/lib"
+     "${CMAKE_BINARY_DIR}/libhdfspp_ep-prefix/src/libhdfspp_ep/third_party/tr2"
+     )
+set (LIBHDFSPP_STATIC_LIB_NAME hdfspp_static)
+set (LIBHDFSPP_STATIC_LIB "${LIBHDFSPP_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}${LIBHDFSPP_STATIC_LIB_NAME}${CMAKE_STATIC_LIBRARY_SUFFIX}")
+set (LIBHDFSPP_SRC_URL "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/libhdfspp.tar.gz")
+set (LIBHDFSPP_CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                      -DCMAKE_INSTALL_PREFIX=${LIBHDFSPP_PREFIX}
+                      -DPROTOBUF_INCLUDE_DIR=${PROTOBUF_INCLUDE_DIRS}
+                      -DPROTOBUF_LIBRARY=${PROTOBUF_STATIC_LIB}
+                      -DPROTOBUF_PROTOC_LIBRARY=${PROTOC_STATIC_LIB}
+                      -DCMAKE_C_FLAGS=${EP_C_FLAGS}
+                      -DBUILD_SHARED_LIBS=OFF
+                      -DHDFSPP_LIBRARY_ONLY=TRUE)
+
+ExternalProject_Add (libhdfspp_ep
+  URL ${LIBHDFSPP_SRC_URL}
+  BUILD_BYPRODUCTS "${LIBHDFSPP_STATIC_LIB}"
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
+  CMAKE_ARGS ${LIBHDFSPP_CMAKE_ARGS})
+
+include_directories (SYSTEM ${LIBHDFSPP_INCLUDE_DIRS})
+add_library (libhdfspp STATIC IMPORTED)
+set_target_properties (libhdfspp PROPERTIES IMPORTED_LOCATION ${LIBHDFSPP_STATIC_LIB})
+set (LIBHDFSPP_LIBRARIES libhdfspp ${CYRUS_SASL_SHARED_LIB} ${OPENSSL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+add_dependencies (libhdfspp libhdfspp_ep)
+install(DIRECTORY ${LIBHDFSPP_PREFIX}/lib DESTINATION .
+                                     PATTERN "pkgconfig" EXCLUDE
+                                     PATTERN "*.so*" EXCLUDE
+                                     PATTERN "*.dylib" EXCLUDE)

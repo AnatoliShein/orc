@@ -50,7 +50,7 @@ namespace orc {
       hdfs::URI uri;
       try {
         uri = hdfs::URI::parse_from_string(filename);
-      } catch (const hdfs::uri_parse_error& e) {
+      } catch (const hdfs::uri_parse_error&) {
         throw ParseError("Malformed URI: " + filename);
       }
 
