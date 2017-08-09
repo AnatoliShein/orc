@@ -207,6 +207,7 @@ set (LIBHDFSPP_CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                       -DHDFSPP_LIBRARY_ONLY=TRUE)
 
 ExternalProject_Add (libhdfspp_ep
+  DEPENDS protobuf_ep
   URL ${LIBHDFSPP_SRC_URL}
   BUILD_BYPRODUCTS "${LIBHDFSPP_STATIC_LIB}"
   LOG_DOWNLOAD 1
@@ -219,7 +220,7 @@ include_directories (SYSTEM ${LIBHDFSPP_INCLUDE_DIRS})
 add_library (libhdfspp STATIC IMPORTED)
 set_target_properties (libhdfspp PROPERTIES IMPORTED_LOCATION ${LIBHDFSPP_STATIC_LIB})
 set (LIBHDFSPP_LIBRARIES libhdfspp ${CYRUS_SASL_SHARED_LIB} ${OPENSSL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-add_dependencies (libhdfspp libhdfspp_ep protobuf_ep)
+add_dependencies (libhdfspp libhdfspp_ep)
 install(DIRECTORY ${LIBHDFSPP_PREFIX}/lib DESTINATION .
                                      PATTERN "pkgconfig" EXCLUDE
                                      PATTERN "*.so*" EXCLUDE
