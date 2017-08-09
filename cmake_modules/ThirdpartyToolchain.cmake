@@ -219,7 +219,7 @@ include_directories (SYSTEM ${LIBHDFSPP_INCLUDE_DIRS})
 add_library (libhdfspp STATIC IMPORTED)
 set_target_properties (libhdfspp PROPERTIES IMPORTED_LOCATION ${LIBHDFSPP_STATIC_LIB})
 set (LIBHDFSPP_LIBRARIES libhdfspp ${CYRUS_SASL_SHARED_LIB} ${OPENSSL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-add_dependencies (libhdfspp libhdfspp_ep)
+add_dependencies (libhdfspp libhdfspp_ep protobuf)
 install(DIRECTORY ${LIBHDFSPP_PREFIX}/lib DESTINATION .
                                      PATTERN "pkgconfig" EXCLUDE
                                      PATTERN "*.so*" EXCLUDE
