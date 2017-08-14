@@ -142,6 +142,7 @@ add_library (orc STATIC
   ByteRLE.cc
   ColumnPrinter.cc
   ColumnReader.cc
+  ColumnWriter.cc
   Common.cc
   Compression.cc
   Exceptions.cc
@@ -159,6 +160,7 @@ add_library (orc STATIC
   Timezone.cc
   TypeImpl.cc
   Vector.cc
+  Writer.cc
   )
 
 install(TARGETS orc DESTINATION lib)
