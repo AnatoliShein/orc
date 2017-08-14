@@ -173,4 +173,4 @@ target_link_libraries (orc
   ${LIBHDFSPP_LIBRARIES}
   )
 
-add_dependencies(orc protobuf)
+add_dependencies(orc protobuf protoc)
