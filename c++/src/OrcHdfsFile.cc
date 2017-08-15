@@ -30,8 +30,6 @@
 #include <unistd.h>
 
 #include "hdfspp/hdfspp.h"
-#include "common/hdfs_configuration.h"
-#include "common/configuration_loader.h"
 
 namespace orc {
 
@@ -54,17 +52,10 @@ namespace orc {
         throw ParseError("Malformed URI: " + filename);
       }
 
-      hdfs::Options options;
-      //Setting conf path to default: "$HADOOP_CONF_DIR" or "/etc/hadoop/conf"
-      hdfs::ConfigurationLoader loader;
-      //Loading configs core-site.xml and hdfs-site.xml from the config path
-      hdfs::optional<hdfs::HdfsConfiguration> config =
-          loader.LoadDefaultResources<hdfs::HdfsConfiguration>();
-      //TODO: HDFS-9539 - when resolved, valid config will always be returned
-      if(config){
-        //Loading options from the config
-        options = config->GetOptions();
-      }
+      //This sets conf path to default "$HADOOP_CONF_DIR" or "/etc/hadoop/conf"
+      //and loads configs core-site.xml and hdfs-site.xml from the conf path
+      hdfs::ConfigParser parser;
+      hdfs::Options options = parser.get_options();
       hdfs::IoService * io_service = hdfs::IoService::New();
       //Wrapping file_system into a unique pointer to guarantee deletion
       file_system = std::unique_ptr<hdfs::FileSystem>(

@@ -187,13 +187,7 @@ find_package(OpenSSL)
 find_package(Threads)
 
 set (LIBHDFSPP_PREFIX "${THIRDPARTY_DIR}/libhdfspp_ep-install")
-set (LIBHDFSPP_INCLUDE_DIRS
-     "${LIBHDFSPP_PREFIX}/lib"
-     "${LIBHDFSPP_PREFIX}/include"
-     "${LIBHDFSPP_PREFIX}/third_party/tr2"
-     "${CMAKE_BINARY_DIR}/libhdfspp_ep-prefix/src/libhdfspp_ep/lib"
-     "${CMAKE_BINARY_DIR}/libhdfspp_ep-prefix/src/libhdfspp_ep/third_party/tr2"
-     )
+set (LIBHDFSPP_INCLUDE_DIRS "${LIBHDFSPP_PREFIX}/include")
 set (LIBHDFSPP_STATIC_LIB_NAME hdfspp_static)
 set (LIBHDFSPP_STATIC_LIB "${LIBHDFSPP_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}${LIBHDFSPP_STATIC_LIB_NAME}${CMAKE_STATIC_LIBRARY_SUFFIX}")
 set (LIBHDFSPP_SRC_URL "${CMAKE_SOURCE_DIR}/c++/libs/libhdfspp/libhdfspp.tar.gz")
@@ -210,11 +204,11 @@ set (LIBHDFSPP_CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 ExternalProject_Add (libhdfspp_ep
   DEPENDS protobuf_ep
   URL ${LIBHDFSPP_SRC_URL}
-  BUILD_BYPRODUCTS "${LIBHDFSPP_STATIC_LIB}"
   LOG_DOWNLOAD 1
   LOG_CONFIGURE 1
-  LOG_BUILD 0
+  LOG_BUILD 1
   LOG_INSTALL 1
+  BUILD_BYPRODUCTS "${LIBHDFSPP_STATIC_LIB}"
   CMAKE_ARGS ${LIBHDFSPP_CMAKE_ARGS})
 
 include_directories (SYSTEM ${LIBHDFSPP_INCLUDE_DIRS})
