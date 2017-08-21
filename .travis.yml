@@ -21,5 +21,5 @@ env:
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DOPENSSL_ROOT_DIR=`brew --prefix openssl` ..
   - make package test-out
