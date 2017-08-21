@@ -1,10 +1,10 @@
-Tue Aug 15 11:19:07 EDT 2017
+Mon Aug 21 17:01:11 EDT 2017
 HDFS-10787
-commit 6be43f454b0bf22d07a960010ca496b8e6944796
+commit ca10768f456957a6ff513f400e5c10e54a54b7af
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Tue Aug 15 10:47:29 2017 -0400
+Date:   Mon Aug 21 17:00:42 2017 -0400
 
-    Added get_options and updated tools and examples
+    replaced auto
 diffs: --------------
        --------------
-Tue Aug 15 11:19:08 EDT 2017
+Mon Aug 21 17:01:13 EDT 2017
