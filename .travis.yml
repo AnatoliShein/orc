@@ -11,7 +11,7 @@ matrix:
     os: linux
   - compiler: clang
     os: osx
-    osx_image: xcode6.4
+    osx_image: xcode8.3
 
 jdk:
   - openjdk7
