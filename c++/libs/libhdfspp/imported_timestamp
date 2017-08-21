@@ -1,10 +1,10 @@
-Mon Aug 21 17:01:11 EDT 2017
+Mon Aug 21 17:17:52 EDT 2017
 HDFS-10787
-commit ca10768f456957a6ff513f400e5c10e54a54b7af
+commit 641d7be3db6b750c00bfe060653ab1e35b31428e
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Mon Aug 21 17:00:42 2017 -0400
+Date:   Mon Aug 21 17:15:38 2017 -0400
 
-    replaced auto
+    added -Wno-conversion
 diffs: --------------
        --------------
-Mon Aug 21 17:01:13 EDT 2017
+Mon Aug 21 17:17:52 EDT 2017

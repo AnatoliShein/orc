@@ -55,7 +55,26 @@ namespace orc {
       //This sets conf path to default "$HADOOP_CONF_DIR" or "/etc/hadoop/conf"
       //and loads configs core-site.xml and hdfs-site.xml from the conf path
       hdfs::ConfigParser parser;
-      hdfs::Options options = parser.get_options();
+      if(!parser.LoadDefaultResources()){
+        std::cerr << "Could not load default resources. " << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      auto stats = parser.ValidateResources();
+      //validating core-site.xml
+      if(!stats[0].second.ok()){
+        std::cerr << stats[0].first << " is invalid: " << stats[0].second.ToString() << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      //validating hdfs-site.xml
+      if(!stats[1].second.ok()){
+        std::cerr << stats[1].first << " is invalid: " << stats[1].second.ToString() << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      hdfs::Options options;
+      if(!parser.get_options(options)){
+        std::cerr << "Could not load Options object. " << std::endl;
+        exit(EXIT_FAILURE);
+      }
       hdfs::IoService * io_service = hdfs::IoService::New();
       //Wrapping file_system into a unique pointer to guarantee deletion
       file_system = std::unique_ptr<hdfs::FileSystem>(
