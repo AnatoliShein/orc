@@ -1,10 +1,10 @@
-Mon Aug 21 17:17:52 EDT 2017
+Tue Aug 22 12:13:45 EDT 2017
 HDFS-10787
-commit 641d7be3db6b750c00bfe060653ab1e35b31428e
+commit 7a1ea87718941036252c5803c50e028b1c9f85c8
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Mon Aug 21 17:15:38 2017 -0400
+Date:   Tue Aug 22 12:10:30 2017 -0400
 
-    added -Wno-conversion
+    added cast to int64_t
 diffs: --------------
        --------------
-Mon Aug 21 17:17:52 EDT 2017
+Tue Aug 22 12:13:46 EDT 2017
