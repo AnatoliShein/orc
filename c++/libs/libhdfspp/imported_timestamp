@@ -1,67 +1,10 @@
-Mon Aug 28 11:14:17 EDT 2017
+Mon Aug 28 12:02:58 EDT 2017
 HDFS-10787
-commit 7a1ea87718941036252c5803c50e028b1c9f85c8
+commit 4c686c5b06bb241236caa1f044c05a98f8873a9b
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Tue Aug 22 12:10:30 2017 -0400
+Date:   Mon Aug 28 12:02:40 2017 -0400
 
-    added cast to int64_t
+    conversions of size_t to string
 diffs: --------------
-diff --git a/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/CMakeLists.txt b/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/CMakeLists.txt
-index 021073c..2bcb49a 100644
---- a/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/CMakeLists.txt
-+++ b/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/CMakeLists.txt
-@@ -154,7 +154,7 @@ endif ()
- # Mac OS 10.7 and later deprecates most of the methods in OpenSSL.
- # Add -Wno-deprecated-declarations to avoid the warnings.
- if(APPLE)
--set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -Wno-conversion -Wno-deprecated-declarations -Wno-unused-local-typedef")
-+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -Wno-deprecated-declarations -Wno-unused-local-typedef")
- endif()
- 
- if(DOXYGEN_FOUND)
-diff --git a/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/fs/filehandle.cc b/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/fs/filehandle.cc
-index 2087d53..42f0572 100644
---- a/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/fs/filehandle.cc
-+++ b/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/fs/filehandle.cc
-@@ -237,7 +237,7 @@ void FileHandleImpl::AsyncPreadSome(
- 
-   LOG_DEBUG(kFileHandle, << "FileHandleImpl::AsyncPreadSome("
-             << FMT_THIS_ADDR << "), ...) Datanode hostname=" << dnHostName << ", IP Address=" << dnIpAddr
--            << ", file path=\"" << path_ << "\", offset=" << offset << ", read size=" << size_within_block);
-+            << ", file path=\"" << path_ << "\", offset=" << std::to_string(offset) << ", read size=" << size_within_block);
- 
-   // This is where we will put the logic for re-using a DN connection; we can
-   //    steal the FileHandle's dn and put it back when we're done
-diff --git a/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/rpc/rpc_engine.cc b/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/rpc/rpc_engine.cc
-index 04ed7eb..aa61ee9 100644
---- a/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/rpc/rpc_engine.cc
-+++ b/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/rpc/rpc_engine.cc
-@@ -188,7 +188,7 @@ void RpcEngine::AsyncRpcCommsError(
-     const Status &status,
-     std::shared_ptr<RpcConnection> failedConnection,
-     std::vector<std::shared_ptr<Request>> pendingRequests) {
--  LOG_ERROR(kRPC, << "RpcEngine::AsyncRpcCommsError called; status=\"" << status.ToString() << "\" conn=" << failedConnection.get() << " reqs=" << pendingRequests.size());
-+  LOG_ERROR(kRPC, << "RpcEngine::AsyncRpcCommsError called; status=\"" << status.ToString() << "\" conn=" << failedConnection.get() << " reqs=" << std::to_string(pendingRequests.size()));
- 
-   io_service().post([this, status, failedConnection, pendingRequests]() {
-     RpcCommsError(status, failedConnection, pendingRequests);
-@@ -199,7 +199,7 @@ void RpcEngine::RpcCommsError(
-     const Status &status,
-     std::shared_ptr<RpcConnection> failedConnection,
-     std::vector<std::shared_ptr<Request>> pendingRequests) {
--  LOG_WARN(kRPC, << "RpcEngine::RpcCommsError called; status=\"" << status.ToString() << "\" conn=" << failedConnection.get() << " reqs=" << pendingRequests.size());
-+  LOG_WARN(kRPC, << "RpcEngine::RpcCommsError called; status=\"" << status.ToString() << "\" conn=" << failedConnection.get() << " reqs=" << std::to_string(pendingRequests.size()));
- 
-   std::lock_guard<std::mutex> state_lock(engine_state_lock_);
- 
-@@ -252,7 +252,7 @@ void RpcEngine::RpcCommsError(
-           head_action && head_action->action != RetryAction::FAIL;
- 
-   if (haveRequests) {
--    LOG_TRACE(kRPC, << "Have " << pendingRequests.size() << " requests to resend");
-+    LOG_TRACE(kRPC, << "Have " << std::to_string(pendingRequests.size()) << " requests to resend");
-     bool needNewConnection = !conn_;
-     if (needNewConnection) {
-       LOG_DEBUG(kRPC, << "Creating a new NN conection");
        --------------
-Mon Aug 28 11:14:17 EDT 2017
+Mon Aug 28 12:02:58 EDT 2017
