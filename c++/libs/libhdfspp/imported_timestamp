@@ -1,10 +1,10 @@
-Mon Aug 28 12:02:58 EDT 2017
+Mon Aug 28 12:45:46 EDT 2017
 HDFS-10787
-commit 4c686c5b06bb241236caa1f044c05a98f8873a9b
+commit 5c3118f6eec8e2709d91a15dc7fe80149030268b
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Mon Aug 28 12:02:40 2017 -0400
+Date:   Mon Aug 28 12:45:36 2017 -0400
 
-    conversions of size_t to string
+    common code in examples, off_t fix
 diffs: --------------
        --------------
-Mon Aug 28 12:02:58 EDT 2017
+Mon Aug 28 12:45:46 EDT 2017
