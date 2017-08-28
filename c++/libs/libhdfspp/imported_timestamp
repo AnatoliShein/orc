@@ -1,4 +1,4 @@
-Mon Aug 28 10:12:58 EDT 2017
+Mon Aug 28 11:14:17 EDT 2017
 HDFS-10787
 commit 7a1ea87718941036252c5803c50e028b1c9f85c8
 Author: Anatoli Shein <anatoli.shein@hpe.com>
@@ -32,5 +32,36 @@ index 2087d53..42f0572 100644
  
    // This is where we will put the logic for re-using a DN connection; we can
    //    steal the FileHandle's dn and put it back when we're done
+diff --git a/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/rpc/rpc_engine.cc b/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/rpc/rpc_engine.cc
+index 04ed7eb..aa61ee9 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/rpc/rpc_engine.cc
++++ b/hadoop-hdfs-project/hadoop-hdfs-native-client/src/main/native/libhdfspp/lib/rpc/rpc_engine.cc
+@@ -188,7 +188,7 @@ void RpcEngine::AsyncRpcCommsError(
+     const Status &status,
+     std::shared_ptr<RpcConnection> failedConnection,
+     std::vector<std::shared_ptr<Request>> pendingRequests) {
+-  LOG_ERROR(kRPC, << "RpcEngine::AsyncRpcCommsError called; status=\"" << status.ToString() << "\" conn=" << failedConnection.get() << " reqs=" << pendingRequests.size());
++  LOG_ERROR(kRPC, << "RpcEngine::AsyncRpcCommsError called; status=\"" << status.ToString() << "\" conn=" << failedConnection.get() << " reqs=" << std::to_string(pendingRequests.size()));
+ 
+   io_service().post([this, status, failedConnection, pendingRequests]() {
+     RpcCommsError(status, failedConnection, pendingRequests);
+@@ -199,7 +199,7 @@ void RpcEngine::RpcCommsError(
+     const Status &status,
+     std::shared_ptr<RpcConnection> failedConnection,
+     std::vector<std::shared_ptr<Request>> pendingRequests) {
+-  LOG_WARN(kRPC, << "RpcEngine::RpcCommsError called; status=\"" << status.ToString() << "\" conn=" << failedConnection.get() << " reqs=" << pendingRequests.size());
++  LOG_WARN(kRPC, << "RpcEngine::RpcCommsError called; status=\"" << status.ToString() << "\" conn=" << failedConnection.get() << " reqs=" << std::to_string(pendingRequests.size()));
+ 
+   std::lock_guard<std::mutex> state_lock(engine_state_lock_);
+ 
+@@ -252,7 +252,7 @@ void RpcEngine::RpcCommsError(
+           head_action && head_action->action != RetryAction::FAIL;
+ 
+   if (haveRequests) {
+-    LOG_TRACE(kRPC, << "Have " << pendingRequests.size() << " requests to resend");
++    LOG_TRACE(kRPC, << "Have " << std::to_string(pendingRequests.size()) << " requests to resend");
+     bool needNewConnection = !conn_;
+     if (needNewConnection) {
+       LOG_DEBUG(kRPC, << "Creating a new NN conection");
        --------------
-Mon Aug 28 10:12:58 EDT 2017
+Mon Aug 28 11:14:17 EDT 2017
