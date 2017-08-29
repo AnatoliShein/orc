@@ -1,10 +1,10 @@
-Tue Aug 29 11:46:37 EDT 2017
+Tue Aug 29 12:27:41 EDT 2017
 HDFS-10787
-commit 7b6833f2db6bc92b1fd184f85c9e3bff3dc545d4
+commit 3307e752321fd35d47dcf69eb418103f3b402ed3
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Tue Aug 29 11:45:46 2017 -0400
+Date:   Tue Aug 29 12:26:50 2017 -0400
 
-    added flag BUILD_SHARED_HDFSPP
+    fixed set_target_properties
 diffs: --------------
        --------------
-Tue Aug 29 11:46:37 EDT 2017
+Tue Aug 29 12:27:41 EDT 2017

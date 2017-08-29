@@ -133,7 +133,7 @@ add_custom_command(OUTPUT orc_proto.pb.h orc_proto.pb.cc
         "${CMAKE_SOURCE_DIR}/proto/orc_proto.proto"
 )
 
-add_library (orc STATIC
+set(SOURCE_FILES
   "${CMAKE_CURRENT_BINARY_DIR}/Adaptor.hh"
   orc_proto.pb.h
   io/InputStream.cc
@@ -150,7 +150,6 @@ add_library (orc STATIC
   LzoDecompressor.cc
   MemoryPool.cc
   OrcFile.cc
-  OrcHdfsFile.cc
   Reader.cc
   RLEv1.cc
   RLEv2.cc
@@ -162,6 +161,12 @@ add_library (orc STATIC
   Vector.cc
   Writer.cc
   )
+
+if(ORC_CXX_HAS_THREAD_LOCAL)
+  set(SOURCE_FILES ${SOURCE_FILES} OrcHdfsFile.cc)
+endif(ORC_CXX_HAS_THREAD_LOCAL)
+
+add_library (orc STATIC ${SOURCE_FILES})
 
 install(TARGETS orc DESTINATION lib)
 

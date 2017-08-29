@@ -30,11 +30,15 @@ void printContents(const char* filename, const orc::RowReaderOptions& rowReaderO
   orc::ReaderOptions readerOpts;
   std::unique_ptr<orc::Reader> reader;
   std::unique_ptr<orc::RowReader> rowReader;
+#if(ORC_CXX_HAS_THREAD_LOCAL)
   if(strncmp (filename, "hdfs://", 7) == 0){
     reader = orc::createReader(orc::readHdfsFile(std::string(filename)), readerOpts);
   } else {
+#endif
     reader = orc::createReader(orc::readLocalFile(std::string(filename)), readerOpts);
-  }
+#if(ORC_CXX_HAS_THREAD_LOCAL)
+    }
+#endif
   rowReader = reader->createRowReader(rowReaderOpts);
 
   std::unique_ptr<orc::ColumnVectorBatch> batch = rowReader->createRowBatch(1000);

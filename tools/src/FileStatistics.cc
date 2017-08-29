@@ -29,12 +29,15 @@ void printStatistics(const char *filename, bool withIndex) {
 
   orc::ReaderOptions opts;
   std::unique_ptr<orc::Reader> reader;
+#if(ORC_CXX_HAS_THREAD_LOCAL)
   if(strncmp (filename, "hdfs://", 7) == 0){
     reader = orc::createReader(orc::readHdfsFile(std::string(filename)), opts);
   } else {
+#endif
     reader = orc::createReader(orc::readLocalFile(std::string(filename)), opts);
-  }
-
+#if(ORC_CXX_HAS_THREAD_LOCAL)
+    }
+#endif
   // print out all selected columns statistics.
   std::unique_ptr<orc::Statistics> colStats = reader->getStatistics();
   std::cout << "File " << filename << " has "

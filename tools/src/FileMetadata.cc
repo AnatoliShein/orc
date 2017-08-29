@@ -83,11 +83,15 @@ void printRawTail(std::ostream& out,
                   const char*filename) {
   out << "Raw file tail: " << filename << "\n";
   std::unique_ptr<orc::Reader> reader;
+#if(ORC_CXX_HAS_THREAD_LOCAL)
   if(strncmp (filename, "hdfs://", 7) == 0){
     reader = orc::createReader(orc::readHdfsFile(filename), orc::ReaderOptions());
   } else {
+#endif
     reader = orc::createReader(orc::readLocalFile(filename), orc::ReaderOptions());
+#if(ORC_CXX_HAS_THREAD_LOCAL)
   }
+#endif
   // Parse the file tail from the serialized one.
   orc::proto::FileTail tail;
   if (!tail.ParseFromString(reader->getSerializedFileTail())) {
@@ -98,11 +102,15 @@ void printRawTail(std::ostream& out,
 
 void printMetadata(std::ostream & out, const char*filename, bool verbose) {
   std::unique_ptr<orc::Reader> reader;
+#if(ORC_CXX_HAS_THREAD_LOCAL)
   if(strncmp (filename, "hdfs://", 7) == 0){
     reader = orc::createReader(orc::readHdfsFile(filename), orc::ReaderOptions());
   } else {
+#endif
     reader = orc::createReader(orc::readLocalFile(filename), orc::ReaderOptions());
-  }
+#if(ORC_CXX_HAS_THREAD_LOCAL)
+    }
+#endif
   out << "{ \"name\": \"" << filename << "\",\n";
   uint64_t numberColumns = reader->getType().getMaximumColumnId() + 1;
   out << "  \"type\": \""

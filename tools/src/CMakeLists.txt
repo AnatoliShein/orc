@@ -74,6 +74,8 @@ target_link_libraries (timezone-dump
   ${PROTOBUF_LIBRARIES}
   )
 
+add_definitions(-DORC_CXX_HAS_THREAD_LOCAL=${ORC_CXX_HAS_THREAD_LOCAL})
+
 install(TARGETS
    orc-contents
    orc-metadata
