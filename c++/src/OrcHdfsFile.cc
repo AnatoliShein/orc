@@ -56,24 +56,20 @@ namespace orc {
       //and loads configs core-site.xml and hdfs-site.xml from the conf path
       hdfs::ConfigParser parser;
       if(!parser.LoadDefaultResources()){
-        std::cerr << "Could not load default resources. " << std::endl;
-        exit(EXIT_FAILURE);
+        throw ParseError("Could not load default resources. ");
       }
       auto stats = parser.ValidateResources();
       //validating core-site.xml
       if(!stats[0].second.ok()){
-        std::cerr << stats[0].first << " is invalid: " << stats[0].second.ToString() << std::endl;
-        exit(EXIT_FAILURE);
+        throw ParseError(stats[0].first + " is invalid: " + stats[0].second.ToString());
       }
       //validating hdfs-site.xml
       if(!stats[1].second.ok()){
-        std::cerr << stats[1].first << " is invalid: " << stats[1].second.ToString() << std::endl;
-        exit(EXIT_FAILURE);
+        throw ParseError(stats[1].first + " is invalid: " + stats[1].second.ToString());
       }
       hdfs::Options options;
       if(!parser.get_options(options)){
-        std::cerr << "Could not load Options object. " << std::endl;
-        exit(EXIT_FAILURE);
+        throw ParseError("Could not load Options object. ");
       }
       hdfs::IoService * io_service = hdfs::IoService::New();
       //Wrapping file_system into a unique pointer to guarantee deletion
@@ -129,7 +125,8 @@ namespace orc {
       totalLength = stat_info.length;
     }
 
-    ~HdfsFileInputStream();
+    ~HdfsFileInputStream() {
+    }
 
     uint64_t getLength() const override {
       return totalLength;
@@ -166,9 +163,6 @@ namespace orc {
       return filename;
     }
   };
-
-  HdfsFileInputStream::~HdfsFileInputStream() {
-  }
 
   std::unique_ptr<InputStream> readHdfsFile(const std::string& path) {
     return std::unique_ptr<InputStream>(new HdfsFileInputStream(path));

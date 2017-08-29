@@ -179,3 +179,7 @@ target_link_libraries (orc
   )
 
 add_dependencies(orc protobuf)
+
+if(ORC_CXX_HAS_THREAD_LOCAL)
+  add_definitions(-DORC_CXX_HAS_THREAD_LOCAL)
+endif(ORC_CXX_HAS_THREAD_LOCAL)

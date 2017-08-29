@@ -70,16 +70,8 @@ void processFile(const char* filename,
   std::unique_ptr<orc::MemoryPool> pool(new TestMemoryPool());
   readerOpts.setMemoryPool(*(pool.get()));
 
-  std::unique_ptr<orc::Reader> reader;
-#if(ORC_CXX_HAS_THREAD_LOCAL)
-  if(strncmp (filename, "hdfs://", 7) == 0){
-    reader = orc::createReader(orc::readHdfsFile(std::string(filename)), readerOpts);
-  } else {
-#endif
-    reader = orc::createReader(orc::readLocalFile(std::string(filename)), readerOpts);
-#if(ORC_CXX_HAS_THREAD_LOCAL)
-    }
-#endif
+  std::unique_ptr<orc::Reader> reader =
+                  orc::createReader(orc::readLocalFile(std::string(filename)), readerOpts);
   std::unique_ptr<orc::RowReader> rowReader = reader->createRowReader(rowReaderOpts);
 
   std::unique_ptr<orc::ColumnVectorBatch> batch =
