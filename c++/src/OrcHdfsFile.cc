@@ -125,9 +125,6 @@ namespace orc {
       totalLength = stat_info.length;
     }
 
-    ~HdfsFileInputStream() {
-    }
-
     uint64_t getLength() const override {
       return totalLength;
     }
@@ -162,7 +159,12 @@ namespace orc {
     const std::string& getName() const override {
       return filename;
     }
+    
+    ~HdfsFileInputStream();
   };
+
+  HdfsFileInputStream::~HdfsFileInputStream() {
+  }
 
   std::unique_ptr<InputStream> readHdfsFile(const std::string& path) {
     return std::unique_ptr<InputStream>(new HdfsFileInputStream(path));
