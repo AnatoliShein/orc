@@ -65,6 +65,19 @@ CHECK_CXX_SOURCE_COMPILES("
   ORC_CXX_HAS_CSTDINT
 )
 
+#find_package(Threads)
+#unset (ORC_CXX_HAS_THREAD_LOCAL CACHE)
+#set (CMAKE_REQUIRED_DEFINITIONS "-std=c++11")
+#set (CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+#CHECK_CXX_SOURCE_COMPILES("
+    #include <thread>
+#    int main(void) {
+#      thread_local int s;
+#      return 0;
+#    }"
+#  ORC_CXX_HAS_THREAD_LOCAL
+#)
+
 configure_file (
   "orc/orc-config.hh.in"
   "${CMAKE_CURRENT_BINARY_DIR}/orc/orc-config.hh"
