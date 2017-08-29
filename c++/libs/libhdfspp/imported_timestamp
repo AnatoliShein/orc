@@ -1,10 +1,10 @@
-Mon Aug 28 12:45:46 EDT 2017
+Tue Aug 29 10:47:13 EDT 2017
 HDFS-10787
-commit 5c3118f6eec8e2709d91a15dc7fe80149030268b
+commit ed0fc5f87aef80447b20e251559fee2bb9385ffa
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Mon Aug 28 12:45:36 2017 -0400
+Date:   Tue Aug 29 10:41:19 2017 -0400
 
-    common code in examples, off_t fix
+    fixed SHARED libhdfspp library
 diffs: --------------
        --------------
-Mon Aug 28 12:45:46 EDT 2017
+Tue Aug 29 10:47:13 EDT 2017
