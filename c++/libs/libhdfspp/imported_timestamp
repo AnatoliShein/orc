@@ -1,10 +1,10 @@
-Tue Aug 29 12:27:41 EDT 2017
+Wed Aug 30 09:17:55 EDT 2017
 HDFS-10787
-commit 3307e752321fd35d47dcf69eb418103f3b402ed3
+commit 1fd4652962d2d796a4b6ebdf91a4b3a207490c80
 Author: Anatoli Shein <anatoli.shein@hpe.com>
-Date:   Tue Aug 29 12:26:50 2017 -0400
+Date:   Wed Aug 30 09:17:43 2017 -0400
 
-    fixed set_target_properties
+    fixed warnings
 diffs: --------------
        --------------
-Tue Aug 29 12:27:41 EDT 2017
+Wed Aug 30 09:17:55 EDT 2017
